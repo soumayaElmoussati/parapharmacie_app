@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block dashboard %}
+
+<div class="content-page">
+     <div class="container-fluid add-form-list">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">Ajouter Produits</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" data-toggle="validator" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                            {% buttons %}
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                             </div>
+                            {% endbuttons %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Page end  -->
+    </div>
+</div>
+
+{% endblock dashboard %}

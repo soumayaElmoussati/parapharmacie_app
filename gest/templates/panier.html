@@ -1,0 +1,132 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block dashboard %}
+
+<div class="content-page">
+
+
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-sm-12 col-lg-10">
+                <div class="card">
+                   <div class="card-header d-flex justify-content-between">
+                      <div class="header-title">
+                         <h4 class="card-title">Panier</h4>
+                         
+                      </div>
+                      <a href="http://para.sid.co.ma/validation/" id="cat" style="margin-right: 0%; font-size: x-large; text-decoration: none;" onclick="fp()">Valider L'achat</a>
+
+                      <a href="{% url 'gest:panier_vider' %}" style="margin-right: 0%; font-size: x-large; text-decoration: none;">Vider Panier</a>
+                   </div>
+                   <div class="card-body">
+                      
+                    <div class="col-lg-12">
+                        <div class="table-responsive rounded mb-3">
+                        <table class="data-table table mb-0 tbl-server-info">
+                            <thead class="bg-white text-uppercase">
+                                <tr class="ligth ligth-data">
+                                    <th>Produits</th>
+                                    <th>Quantite</th>
+                                    <th>Remise</th>
+                                    <th>Prix</th>
+                                    <th>Annuler</th>
+                                </tr>
+                            </thead>
+                            <tbody class="ligth-body">
+                                {% for prod in data %}
+                                <tr>
+                                    <td>{{prod.nom}}</td>
+                                    <td>{{prod.quantite}}</td>
+                                    <td>{{prod.remise}}</td>
+                                    <td>{{prod.p_remise|floatformat:2}} DH</td>
+                                    <td><a class="badge badge-warning mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Ajouter Au Panier"
+                                        onclick="confirme('{{prod.pk}}', 'dele')" href="#"><i class="fa fa-trash-alt fa-2x"></i></a>
+                          </td>
+                                </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td>Total : </td>
+                                    <td>-</td>
+                                    <td>{{total_paye|floatformat:2}}</td>
+                                </tr>
+
+                                <tr>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <input type="text" class="form-control col-4" placeholder="Montant" id="montant" onkeyup="fun()">
+                                            <h5>&nbsp; &nbsp; &nbsp; Reste : </h5>
+                                            <h5 id="member-kosten" class="col-4"></h5>
+                                            <br>
+                                            <input type="text" class="form-control col-4" id="payee" value="{{total_paye}}" style="display: none;">
+                                            <br>  
+                                        </div>   
+                                        <div class="row">
+                                            <select name="client" id="select_id" class="flp col-12">
+                                                {% for l in client %}
+                                                <option value="{{l.nom}}">{{l.nom}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <select name="payment" id="select_payment" class="flp col-12">
+                                                <option value="ESPECE">ESPECE</option>
+                                                <option value="DETTE">DETTE</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                          
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                        
+                    <br>
+                        </div>
+                    </div>
+                   </div>
+                </div>
+            
+             </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- CSS -->
+
+
+<script>
+    function facture() {
+        var client = document.getElementById("select_id").value;
+        window.open( "http://para.sid.co.ma/pdf/"+client, "_blank");
+    }
+    function bl() {
+        var client = document.getElementById("select_id").value;
+        window.open( "http://para.sid.co.ma/pdf/"+client, "_blank");
+    }
+    function fun(){
+var price = document.getElementById("payee").value;;
+var member = document.getElementById("montant").value;
+var calculate = member - price;
+var ausgabe = (calculate);
+document.getElementById("member-kosten").innerHTML = ausgabe;
+  }
+  function fp()
+						{
+							d = document.getElementById("select_id").value;
+                            t = document.getElementById("select_payment").value;
+						
+							var f = document.getElementById('cat');
+							var sliced = f.href;
+							
+							slic = sliced + d + "/" + t;
+
+							f.href = slic;
+						}
+</script>
+
+
+{% endblock dashboard %}

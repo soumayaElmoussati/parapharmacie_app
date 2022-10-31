@@ -1,0 +1,42 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block dashboard %}
+
+<div class="content-page">
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-sm-12 col-lg-6">
+                <div class="card">
+                   <div class="card-header d-flex justify-content-between">
+                      <div class="header-title">
+                         <h4 class="card-title">Ajouter Vente</h4>
+                      </div>
+                   </div>
+                   <div class="card-body">
+                      
+                      <form method="POST">
+                        {% csrf_token %}
+                        {% bootstrap_form form %}
+                        {% buttons %}
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                         <button type="submit" class="btn bg-danger">Cancel</button>
+                         </div>
+                        {% endbuttons %}
+                      </form>
+                   </div>
+                </div>
+            
+             </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock dashboard %}

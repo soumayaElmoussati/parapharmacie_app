@@ -1,0 +1,123 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block dashboard %}
+
+
+      <div class="content-page">
+     <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+                    <div>
+                        <h4 class="mb-3">List Fournisseur</h4>
+                    </div>
+                    <a href="#" class="btn btn-primary add-list" data-toggle="modal" data-target="#exampleModal"><i class="las la-plus mr-3"></i>Ajouter Fournisseur</a>
+                   
+                </div>
+            </div>
+            <div class="col-lg-12">
+
+                <table class="table data-table stripe">
+                    <thead>
+                       <tr class="ligth">
+                            <th>Nom</th>
+                            <th>Telephone</th>
+                            <th>Email</th>
+                            <th>Profil</th>
+                       </tr>
+                    </thead>
+                    <tbody>
+                        {% for prod in client %}
+                        <tr>
+                            <td>{{prod.nom}}</td>
+                            <td>{{prod.telephone}}</td>
+                            <td>{{prod.email}}</td>
+                            
+                            <td>
+                                <div class="d-flex align-items-center list-action">
+                                    <a class="badge badge-info mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Ajouter Au Panier"
+                                        href="{% url 'gest:frsprofil' prod.pk %}"><i class="fa fa-user fa-2x" aria-hidden="true"></i></a>
+                                    <a onclick="confirme('{{prod.pk}}', 'frs_supp')" class="badge badge-warning mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Modifiez"
+                                        href="#"><i class="fa fa-trash-alt fa-2x"></i></a>
+                          
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                       
+                    
+                    </tbody>
+                 </table>
+                 <div>
+                    {% if prodListe.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination" style="justify-content: center;">
+                                {% if prodListe.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{prodListe.previous_page_number}}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+    
+                                {% for i in prodListe.paginator.page_range %}
+                                <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                {% endfor %}
+                          
+                                {% if prodListe.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{prodListe.next_page_number}}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                </div>
+    
+            </div>
+            </div>
+        </div>
+        <!-- Page end  -->
+    </div>
+
+      </div>
+
+
+      
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+           <div class="modal-content">
+              <div class="modal-header">
+                 <h5 class="modal-title" id="exampleModalLabel">Ajouter Fournisseur</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                 </button>
+              </div>
+              <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% buttons %}
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                     <button type="button" data-dismiss="modal" class="btn bg-danger">Annuler</button>
+                     </div>
+                    {% endbuttons %}
+
+                  </form>
+              </div>
+           </div>
+        </div>
+     </div>
+
+
+
+
+      {% endblock dashboard %}
+   

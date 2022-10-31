@@ -1,0 +1,516 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block dashboard %}
+
+<div class="content-page">
+    <div class="container-fluid">
+       <div class="row">
+           <div class="col-lg-4">
+               <div class="card card-transparent card-block card-stretch card-height border-none">
+                   <div class="card-body p-0 mt-lg-2 mt-0">
+                       <h3 class="mb-3">Situation De La Parapharmacie</h3>
+                       <h4 class="mr-4">{{dd}} / {{mm}} / {{yy}}</h4>
+                   </div>
+               </div>
+           </div>
+           {% if user.is_superuser %}
+           <div class="col-lg-8">
+               <div class="row">
+                   <div class="col-lg-4 col-md-4">
+                       <div class="card card-block card-stretch card-height">
+                           <div class="card-body">
+                               <div class="d-flex align-items-center mb-4 card-total-sale">
+                                   <div class="icon iq-icon-box-2 bg-info-light">
+                                       <img src="static/assets/images/product/1.png" class="img-fluid" alt="image">
+                                   </div>
+                                   <div>
+                                       <p class="mb-2">Total Ventes</p>
+                                       <h4>{% if montant == None %} 0 DH {% else %} {{montant |floatformat:2}} DH {% endif %}</h4>
+                                   </div>
+                               </div>                                
+                               <div class="iq-progress-bar mt-2">
+                                   <span class="bg-info iq-progress progress-1" data-percent="85">
+                                   </span>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="col-lg-4 col-md-4">
+                       <div class="card card-block card-stretch card-height">
+                           <div class="card-body">
+                               <div class="d-flex align-items-center mb-4 card-total-sale">
+                                   <div class="icon iq-icon-box-2 bg-danger-light">
+                                       <img src="static/assets/images/product/2.png" class="img-fluid" alt="image">
+                                   </div>
+                                   <div>
+                                       <p class="mb-2">Total Produits</p>
+                                       <h4>{% if total_prod == None %} 0 {% else %} {{total_prod}} {% endif %}</h4>
+                                   </div>
+                               </div>
+                               <div class="iq-progress-bar mt-2">
+                                   <span class="bg-danger iq-progress progress-1" data-percent="70">
+                                   </span>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="col-lg-4 col-md-4">
+                       <div class="card card-block card-stretch card-height">
+                           <div class="card-body">
+                               <div class="d-flex align-items-center mb-4 card-total-sale">
+                                   <div class="icon iq-icon-box-2 bg-success-light">
+                                       <img src="static/assets/images/product/3.png" class="img-fluid" alt="image">
+                                   </div>
+                                   <div>
+                                       <p class="mb-2">Produits Vendu</p>
+                                       <h4>{% if total_vente_mois == None %} 0 {% else %} {{total_vente_mois}} {% endif %}</h4>
+                                   </div>
+                               </div>
+                               <div class="iq-progress-bar mt-2">
+                                   <span class="bg-success iq-progress progress-1" data-percent="75">
+                                   </span>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="col-lg-6 col-md-6">
+                    <div class="card card-block card-stretch card-height">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-4 card-total-sale">
+                                <div class="icon iq-icon-box-2 bg-info-light">
+                                    <img src="static/assets/images/product/1.png" class="img-fluid" alt="image">
+                                </div>
+                                <div>
+                                    <p class="mb-2">Total Dettes Impayer</p>
+                                    <h4>{% if data_dettes == None %} 0 DH {% else %} {{data_dettes|floatformat:2}} DH {% endif %}</h4>
+                                </div>
+                            </div>                                
+                            <div class="iq-progress-bar mt-2">
+                                <span class="bg-info iq-progress progress-1" data-percent="85">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="card card-block card-stretch card-height">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-4 card-total-sale">
+                                <div class="icon iq-icon-box-2 bg-info-light">
+                                    <img src="static/assets/images/product/1.png" class="img-fluid" alt="image">
+                                </div>
+                                <div>
+                                    <p class="mb-2">Total Factures Impayer</p>
+                                    <h4>{% if data_fac == None %} 0 DH {% else %} {{data_fac|floatformat:2}} DH {% endif %}</h4>
+                                </div>
+                            </div>                                
+                            <div class="iq-progress-bar mt-2">
+                                <span class="bg-info iq-progress progress-1" data-percent="85">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               </div>
+           </div>
+           <div class="col-lg-4">  
+            <div class="card card-block card-stretch card-height-helf">
+                <div class="card-body">
+                    <div class="d-flex align-items-top justify-content-between">
+                        <div class="">
+                            <p class="mb-0">Ventes Du {{mm}} / {{yy}}</p>
+                            <h5>{% if montant == None %} 0 DH {% else %} {{montant|floatformat:2}} DH {% endif %}</h5>
+                        </div>
+                        <div class="card-header-toolbar d-flex align-items-center">
+                            
+                        </div>
+                    </div>
+                    <div id="layout1-chart-3" class="layout-chart-1"></div>
+                </div>
+            </div>
+            <div class="card card-block card-stretch card-height-helf">
+                <div class="card-body">
+                    <div class="d-flex align-items-top justify-content-between">
+
+                        <div class="card-header-toolbar d-flex align-items-center">
+                            <div class="row">
+                                <div class="col-12 m-2">
+                                    <h5>Dettes Fournisseur</h5>
+                                    <a href="#" class="btn btn-primary add-list" data-toggle="modal" data-target="#exampleModal2">
+                                        <i class="las la-plus mr-3"></i>Ajouter Dettes
+                                    </a>
+                                </div>                                
+                             </div>
+                        </div>
+                        </div>
+                    </div>
+
+            </div>
+           
+        </div>
+        <div class="col-lg-8">  
+            <div class="card card-block card-stretch card-height">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Chiffre Annuelle</h4>
+                    </div>                        
+                    <div class="card-header-toolbar d-flex align-items-center">
+                        <div class="dropdown">
+                            <span class="dropdown-toggle dropdown-bg btn" id="dropdownMenuButton005"
+                                data-toggle="dropdown">
+                                Ce Mois<i class="ri-arrow-down-s-line ml-1"></i>
+                            </span>
+                            
+                        </div>
+                    </div>
+                </div> 
+                <div class="card-body pb-2">
+                    <div class="d-flex flex-wrap align-items-center mt-2">
+                        <div class="d-flex align-items-center progress-order-left">
+                            <div class="progress progress-round m-0 orange conversation-bar" data-percent="46">
+                                <span class="progress-left">
+                                    <span class="progress-bar"></span>
+                                </span>
+                                <span class="progress-right">
+                                    <span class="progress-bar"></span>
+                                </span>
+                            </div>
+                            <div class="progress-value ml-3 pr-5 border-right">
+                                <h5>{{total_year|floatformat:2}}</h5>
+                                <p class="mb-0">Total Ventes Annuelle</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center ml-5 progress-order-right">
+                            <div class="progress progress-round m-0 primary conversation-bar" data-percent="46">
+                                <span class="progress-left">
+                                    <span class="progress-bar"></span>
+                                </span>
+                                <span class="progress-right">
+                                    <span class="progress-bar"></span>
+                                </span>
+                                <div class="progress-value text-primary"></div>
+                            </div>
+                            <div class="progress-value ml-3">
+                                <h5>{{total_prod_ven|floatformat:2}}</h5>
+                                <p class="mb-0">Total Ventes Annuelle</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pt-0">
+                    <div id="layout1-chart-5"></div>
+                </div>
+
+            </div>
+        </div>
+           
+
+         
+        {% endif %}
+        <div class="col-lg-12">
+            <div class="card card-block card-stretch card-height">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Rupture De Stock</h4>
+                    </div>
+                    <div class="card-header-toolbar d-flex align-items-center">
+                        
+                    </div>
+                </div>
+                <div class="card-body">
+
+                 <table class="data-table table mb-0 tbl-server-info">
+                     <thead class="bg-white text-uppercase">
+                         <tr class="ligth ligth-data">
+                             <th>Article </th>
+                             <th>Prix</th>
+                             <th>Quantite</th>
+                             <th>Alimentez</th>
+                         </tr>
+                     </thead>
+                     <tbody class="ligth-body">
+                         {% for pro in rupture %}
+                         <tr>
+                             <td>{{pro.name}}</td>
+                             <td>{{pro.prix}} DH</td>
+                             <td>{{pro.quantity}}</td>
+                             <td>
+                                <a class="badge badge-warning mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Ajouter Au Panier"
+                                href="{% url 'gest:edit' pro.pk %}"><i class="fa fa-pen fa-2x"></i></a>
+                             </td>
+                         </tr>
+                         {% endfor %}
+                     </tbody>
+                 </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="card card-block card-stretch card-height">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Dettes Du {{mm}} / {{yy}}</h4>
+                    </div>
+                    <div class="card-header-toolbar d-flex align-items-center">
+                        
+                    </div>
+                </div>
+                <div class="card-body">
+
+                 <table class="data-table table mb-0 tbl-server-info">
+                     <thead class="bg-white text-uppercase">
+                         <tr class="ligth ligth-data">
+                             <th>Date Creation</th>
+                             <th>Facture N</th>
+                             <th>Fournisseur</th>
+                             <th>Echeance</th>
+                             <th>Montant</th>
+                         </tr>
+                     </thead>
+                     <tbody class="ligth-body">
+                         {% for pro in dettes %}
+                         <tr>
+                             <td>{{pro.date_creation}}</td>
+                             <td>{{pro.numero_facture}}</td>
+                             <td>{{pro.fournisseur}}</td>
+                             <td>{{pro.date}}</td>
+                             <td>{{pro.montant}} DH</td>
+                         </tr>
+                         {% endfor %}
+                     </tbody>
+                 </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="card card-block card-stretch card-height">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Produits Presque Expiree</h4>
+                    </div>
+                    <div class="card-header-toolbar d-flex align-items-center">
+                        
+                    </div>
+                </div>
+                <div class="card-body">
+
+                 <table class="data-table table mb-0 tbl-server-info">
+                     <thead class="bg-white text-uppercase">
+                         <tr class="ligth ligth-data">
+                             <th>Produits</th>
+                             <th>Code Barre</th>
+                             <th>Prix</th>
+                             <th>Date Exp</th>
+                             <th>Quantite</th>
+                         </tr>
+                     </thead>
+                     <tbody class="ligth-body">
+                         {% for pro in expire %}
+                         <tr>
+                             <td>{{pro.name}}</td>
+                             <td>{{pro.codeBarre}}</td>
+                             <td>{{pro.prix}} DH</td>
+                             <td>{{pro.date_expire}}</td>
+                             <td>{{pro.quantity}}</td>
+                         </tr>
+                         {% endfor %}
+                     </tbody>
+                 </table>
+                </div>
+            </div>
+        </div>
+    
+       </div>
+       <!-- Page end  -->
+   </div>
+
+</div>
+
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="exampleModalLabel">Ajouter Fournisseur</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% bootstrap_form forms %}
+                {% buttons %}
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                 <button type="button" data-dismiss="modal" class="btn bg-danger">Annuler</button>
+                 </div>
+                {% endbuttons %}
+                
+              </form>
+          </div>
+       </div>
+    </div>
+ </div>
+
+
+
+
+{% endblock dashboard %}
+
+{% block charts %}
+
+
+<script>
+    function exporter() {
+        var a = $('#dateone').datepicker('getDate');
+        var b = $('#datetwo').datepicker('getDate');
+        var day = a.getDate();
+        var mon = a.getMonth();
+        var year = a.getFullYear();
+        var dayb = b.getDate();
+        var monb = b.getMonth();
+        var yearb = b.getFullYear();
+        window.location.href = 'http://localhost:8900/journal/'+ year + '-' + mon + '-' + day + '/' + yearb + '-' + monb + '-' + dayb ;
+    }
+    $('.sel').chosen({ width: '100%' });
+</script>
+
+
+
+<script>
+    if (jQuery("#layout1-chart-5").length) {    
+  options = {
+    series: [{
+    name: 'Total Ventes En MAD',
+    data: {{year}}
+  }],
+    chart: {
+    type: 'bar',
+    height: 300
+  },
+  colors: ['#FF7E41'],
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '30%',
+          endingShape: 'rounded'
+        },
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        show: true,
+        width: 3,
+        colors: ['transparent']
+      },
+      xaxis: {
+        categories: ["Jan", "Fev", "Mar", "Avr", "Mai", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        labels: {
+          minWidth: 0,
+          maxWidth: 0
+        }
+      },
+    yaxis: {
+      show: false,
+      labels: {
+        minWidth: 20,
+        maxWidth: 20
+      }
+    },
+      fill: {
+        opacity: 1
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return "" + val + ""
+          }
+        }
+      }
+  };
+  const chart = new ApexCharts(document.querySelector("#layout1-chart-5"), options);
+  chart.render();
+  const body = document.querySelector('body')
+  if (body.classList.contains('dark')) {
+    apexChartUpdate(chart, {
+      dark: true
+    })
+  }
+
+  document.addEventListener('ChangeColorMode', function (e) {
+    apexChartUpdate(chart, e.detail)
+  })
+}
+
+
+
+  if (jQuery("#layout1-chart-3").length) {    
+    options = {
+      series: [{
+        name: "Ventes",
+        data: {{mois}}
+    }],
+    colors: ['#FF7E41'],
+      chart: {
+      height: 150,
+      type: 'line',
+      zoom: {
+        enabled: false
+      },
+      dropShadow: {
+        enabled: true,
+        color: '#000',
+        top: 12,
+        left: 1,
+        blur: 2,
+        opacity: 0.2
+      },
+      toolbar: {
+        show: false
+      },
+      sparkline: {
+        enabled: true,
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      curve: 'smooth',
+      width: 3
+    },
+    title: {
+      text: '',
+      align: 'left'
+    },
+    grid: {
+      row: {
+        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+        opacity: 0.5
+      },
+    },
+    xaxis: {
+      categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
+    }
+    };
+    const chart = new ApexCharts(document.querySelector("#layout1-chart-3"), options);
+    chart.render();
+    const body = document.querySelector('body')
+    if (body.classList.contains('dark')) {
+      apexChartUpdate(chart, {
+        dark: true
+      })
+    }
+
+    document.addEventListener('ChangeColorMode', function (e) {
+      apexChartUpdate(chart, e.detail)
+    })
+  }
+
+
+</script>
+
+{% endblock charts %}

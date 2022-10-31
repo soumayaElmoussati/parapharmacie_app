@@ -1,0 +1,137 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block dashboard %}
+
+
+      <div class="content-page">
+     <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+                    <div>
+                        <h4 class="mb-3">List Produits</h4>
+                    </div>
+                    <a href="{% url 'gest:add_produits' %}" class="btn btn-primary add-list"><i class="las la-plus mr-3"></i>Ajouter Produits</a>
+                </div>
+            </div>
+            <div class="col-lg-12">
+
+                <table class="table stripe">
+                    <thead>
+                       <tr class="ligth">
+                            <th>Produits</th>
+                            <th>Prix</th>
+                            <th>PPH</th>
+                            {% if request.user.is_superuser %}<th>Prix Achat</th>{% endif %}
+                            <th>Remise</th>
+                            <th>Quantite</th>
+                            <th>Action</th>
+                       </tr>
+                    </thead>
+                    <tbody>
+                        {% for prod in prodListe %}
+                        <tr>
+                            <td>{{prod.name}}</td>
+                            <td>{{prod.prix}} DH</td>
+                            <td><input type="number" name="" class="control-form" id="pph{{prod.pk}}" size="4" value="{{prod.prix}}"></td>
+                            {% if request.user.is_superuser %}<td> {{prod.p_achat}}</td> {% else %}{% endif %}
+                            <td><input type="text" name="" class="control-form" id="remise{{prod.pk}}" size="4" value="{{prod.remise_consomateur}}"></td>
+                            <td><input type="text" name="" class="control-form" id="qte{{prod.pk}}" size="4" ></td>
+                            <td>
+                                <div class="d-flex align-items-center list-action">
+                                    <a class="badge badge-info mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Ajouter Au Panier"
+                                        href="#" onclick="validater({{prod.pk}})"><i class="fa fa-shopping-basket fa-2x" aria-hidden="true"></i></a>
+                                    <a class="badge badge-warning mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Modifiez"
+                                        href="{% url 'gest:edit' prod.pk %}"><i class="fa fa-pen fa-2x"></i></a>
+                                    <a class="badge badge-danger mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Modifiez"
+                                        onclick="confirme('{{prod.pk}}', 'deleteProd')" href="#"><i class="fa fa-trash-alt fa-2x"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                       
+                    
+                    </tbody>
+                 </table>
+                 <div>
+                    {% if prodListe.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination" style="justify-content: center;">
+                                {% if prodListe.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{prodListe.previous_page_number}}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+    
+                                {% for i in prodListe.paginator.page_range %}
+                                <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                {% endfor %}
+                          
+                                {% if prodListe.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{prodListe.next_page_number}}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                </div>
+    
+            </div>
+            </div>
+        </div>
+        <!-- Page end  -->
+    </div>
+
+      </div>
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+           <div class="modal-content">
+              <div class="modal-header">
+                 <h5 class="modal-title" id="exampleModalLabel">Alimentation Stock</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">×</span>
+                 </button>
+              </div>
+              <div class="modal-body">
+                <form method="POST" data-toggle="validator" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% buttons %}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    {% endbuttons %}
+                </form>
+              </div>
+           </div>
+        </div>
+     </div>
+      <script>
+          function validater(pk){
+              var remise = document.getElementById("remise"+pk).value;
+              var qte = document.getElementById("qte"+pk).value;
+              var pph = document.getElementById("pph"+pk).value;
+              if (remise == "") { 
+                  remise = 0;
+              }              
+              if (qte == "") { 
+                  qte = 1;
+              }
+              if (pph == "") { 
+                  pph = 0;
+              }
+              window.location.href = "http://para.sid.co.ma/product_panier/"+pk+"/"+remise+"/"+qte+"/"+pph;
+          }
+      </script>
+
+      {% endblock dashboard %}
+   

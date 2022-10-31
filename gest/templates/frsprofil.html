@@ -1,0 +1,102 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block dashboard %}
+
+
+      <div class="content-page">
+     <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+                    <div>
+                        <h4 class="mb-3">Nom : {{nom.nom}}</h4>
+                        <br>
+                        <h4 class="mb-3">Telephone : {{nom.telephone}}</h4>
+                        <br>
+                        <h4 class="mb-3">Email : {{nom.email}}</h4>
+                        <br>
+                        <h4 class="mb-3">Total Dettes : {{dette}} DH</h4>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="col-lg-12">
+
+                <table class="table data-table stripe">
+                    <thead>
+                       <tr class="ligth">
+                            <th>Date</th>
+                            <th>Facture N</th>
+                            <th>Dettes</th>
+                            <th>Echeance</th>
+                            <th>Statut</th>
+                            <th>Modifiez</th>
+                       </tr>
+                    </thead>
+                    <tbody>
+                        {% for prod in vente %}
+                        <tr>
+                            <td>{{prod.date_creation}}</td>
+                            <td>{{prod.numero_facture}}</td>
+                            <td>{{prod.montant}}</td>
+                            <td>{{prod.date | date:"d-m-Y"}}</td>
+                            <td>{{prod.raison}}</td>
+                            <td>
+                                <div class="d-flex align-items-center list-action">
+                                    <a class="badge badge-info mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="payee"
+                                        href="{% url 'gest:payer' prod.pk %}"><i class="fa fa-check-circle fa-2x" aria-hidden="true"></i></a>
+                                    <a class="badge badge-warning mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="impayee"
+                                        href="{% url 'gest:impayer' prod.pk %}"><i class="fa fa-times-circle fa-2x"></i></a>
+                          
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                       
+                    
+                    </tbody>
+                 </table>
+                 <div>
+                    {% if prodListe.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination" style="justify-content: center;">
+                                {% if prodListe.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{prodListe.previous_page_number}}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+    
+                                {% for i in prodListe.paginator.page_range %}
+                                <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                {% endfor %}
+                          
+                                {% if prodListe.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{prodListe.next_page_number}}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                </div>
+    
+            </div>
+            </div>
+        </div>
+        <!-- Page end  -->
+    </div>
+
+      </div>
+
+
+
+      {% endblock dashboard %}
+   

@@ -1,0 +1,91 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block dashboard %}
+
+<div class="content-page">
+     <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
+                    <div>
+                        <h4 class="mb-3">Paiments List</h4>
+                    </div>
+                    <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal"><i class="las la-plus mr-3"></i>Ajouter Paiments</button>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="table-responsive rounded mb-3">
+                <table class="data-table table mb-0 tbl-server-info" id="tabler">
+                    <thead class="bg-white text-uppercase">
+                        <tr class="ligth ligth-data">
+                            <th>Date</th>
+                            <th>Commande Id</th>
+                            <th>Montant</th>
+                            <th>Supp</th>
+                        </tr>
+                    </thead>
+                    <tbody class="ligth-body">
+                        {% for m in data %}
+                        <tr>
+                            <td>{{m.date | date:"d-m-Y"}}</td>
+                            <td>{{m.commande_id}}</td>
+                            <td>{{m.montant}}</td>
+                            <td>
+                                <div class="align-items-left list-action">
+                                    <a class="badge bg-danger mr-2" onclick="confirme('{{m.pk}}', 'delete_paiments')" href="#" ><i class="fa fa-trash-alt fa-2x"></i></a>
+                                </div>
+                            </td>
+                         
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+        <!-- Page end  -->
+    </div>
+
+
+      </div>
+    <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+           <div class="modal-content">
+              <div class="modal-header">
+                 <h5 class="modal-title" id="exampleModalLabel">Paiments</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                 </button>
+              </div>
+              <div class="modal-body">
+                <form method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregister</button>
+                 </div>
+                {% endbuttons %}
+            </form>
+              </div>
+             
+           </div>
+        </div>
+     </div>
+   
+
+
+     <script>
+        $(document).ready(function () {
+    $('#tabler').DataTable({
+        order: [[0, 'desc']],
+    });
+});
+     </script>
+
+{% endblock dashboard %}
+
+

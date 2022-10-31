@@ -1,0 +1,74 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block dashboard %}
+
+<div class="content-page">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
+                <div>
+                    <h4 class="mb-3">Liste Annuler</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <table class="table">
+                <thead>
+                   <tr class="ligth">
+                      <th scope="col">Date</th>
+                      <th scope="col">Produit</th>
+                      <th scope="col">Prix</th>
+                      <th scope="col">Quantite</th>
+                   </tr>
+                </thead>
+                <tbody>
+                    {% for b in data %}
+                    <tr>
+                        <td>{{b.date | date:"d-m-Y"}}</td>
+                        <td>{{b.produit}}</td>
+                        <td>{{b.prix}}</td>
+                        <td>{{b.quantite}}</td>
+                        </tr>
+                        {% endfor %}
+                </tbody>
+             </table>
+             <div>
+                {% if data.has_other_pages %}
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination" style="justify-content: center;">
+                            {% if data.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{data.previous_page_number}}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            {% endif %}
+
+                            {% for i in data.paginator.page_range %}
+                            <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                            {% endfor %}
+                      
+                            {% if data.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{data.next_page_number}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- Page end  -->
+</div>
+
+</div>
+
+{% endblock dashboard %}
+     
